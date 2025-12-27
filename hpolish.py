@@ -32,17 +32,13 @@ def handler(event: keyboard.KeyboardEvent):
 		case "h": 
 			resetLastKey = True
 			if lastKey == "t":
-				keyboard.send("backspace")
-				keyboard.write("θ")
+				keyboard.write("\bθ")
 			elif lastKey == "T":
-				keyboard.send("backspace")
-				keyboard.write("Θ")
+				keyboard.write("\bΘ")
 			elif lastKey == "c":
-				keyboard.send("backspace")
-				keyboard.write("χ̌")
+				keyboard.write("\bχ̌")
 			elif lastKey == "C":
-				keyboard.send("backspace")
-				keyboard.write("X̌")
+				keyboard.write("\bX̌")
 			elif lastKey.lower() == "s":
 				keyboard.write("̌")
 			else:
@@ -86,6 +82,7 @@ def handler(event: keyboard.KeyboardEvent):
 		case "x": keyboard.write("Ξ" if uppercase else "ξ")
 		case "y": keyboard.write("H" if uppercase else "η")
 		case "z": keyboard.write("Z" if uppercase else "ζ")
+
 	lastKey = event.name if not resetLastKey else ""
 	
 
