@@ -44,7 +44,7 @@ def handler(event: keyboard.KeyboardEvent):
 			else:
 				resetLastKey = False
 				keyboard.write("Ψ" if uppercase else "ψ")
-		case "i": keyboard.write("I" if uppercase else "i")
+		case "i": keyboard.write("I" if uppercase else "ι")
 		case "j": keyboard.write("X" if uppercase else "χ")
 		case "k": 
 			if lastKey == "c":
