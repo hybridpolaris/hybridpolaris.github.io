@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle life</title>
+</head>
+<body>
+    <style>
+        body {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        canvas {
+            display: block;
+            padding: 0px; 
+            margin: 0px; 
+            z-index: 1; 
+            position: absolute; 
+            top: 0px; 
+            left: 0px;
+        }
+
+        button {
+            z-index: 3; 
+            position: relative; 
+            float: right;
+            background-color: rgba(255, 255, 255, 0); 
+            border: 1px solid rgba(255, 255, 255, 0.847); 
+            border-radius: 1px; 
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.847);
+        }
+
+        div {
+            z-index: 2; 
+            display: flex; 
+            flex-direction: column; 
+            position: fixed; 
+            top: 50%;
+            transform: translateY(-50%);
+            right: 1%;
+            background-color: rgba(255, 255, 255, 0);
+            font-family: Arial;
+            color: rgba(255, 255, 255, 0.847);
+        }
+
+        .seperator {
+            z-index: 3;
+            position: relative;
+            background-color: white;
+            width: 100%;
+            height: 0.5px;
+            margin-top: 3%;
+            margin-bottom: 10%;
+        }
+
+        h1 {
+            z-index: 3;
+            position: relative;
+            font-weight: normal;
+            margin: 0;
+        }
+    </style>
+    <div class="menu-container">
+        <h1>Particle life</h1>
+        <div class="seperator"></div>
+        <button onclick="resetForceValues()">Reset force values</button>
+        <button onclick="addRandomParticles(5)">Add 10 particles</button>
+        <button onclick="removeRandomParticles(5)">Remove 10 particles</button>
+        <button onclick="resetParticlesCount()">Reset particles count</button>
+        <button onclick="cycleParticles(10)">Cycle 10 particles</button>
+    </div>
+    <canvas id="particleLifeCanvas"></canvas>
+    <script>
+        let screenWidth = window.innerWidth;
+        let screenHeight = window.innerHeight;
+        let frictionHalfLife = 0.454;
+        let deltaT = 0.01;
+        let friction = Math.pow(0.5, deltaT / frictionHalfLife);
+        let K = 0.001;
+        let lastFrame = performance.now();
+        yellow = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+        green = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+        cyan = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+        blue = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+        pink = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+        red = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+
+        display = document.getElementById('particleLifeCanvas')
+        displayContext = display.getContext('2d');
+
+        function resetForceValues() {
+            for (a = 0; a <= 5; a++) {
+                groupInfo[a] = [randomG(), randomG(), randomG(), randomG(), randomG(), randomG()];
+            }
+        }
+
+        function addRandomParticles(amount) {
+            for (let i = 0; i < amount; i++) {
+                const rand = Math.round(Math.random() * 5)
+                particles[rand].push(setParticleInfo(window.innerWidth / 2, window.innerHeight / 2, randomG(), randomG(), particles[rand][0].color)); // bad code lol
+            }
+        }
+
+        function removeRandomParticles(amount) {
+            for (let i = 0; i < amount; i++) {
+                const rand = Math.round(Math.random() * 5)
+                if (particles[rand].length > 1) {
+                    particles[rand].shift()
+                }
+            }
+        }
+
+        function resetParticlesCount() {
+            if (particles[0].length + particles[1].length + particles[2].length + particles[3].length + particles[4].length + particles[5].length > 360) {
+                while (particles[0].length + particles[1].length + particles[2].length + particles[3].length + particles[4].length + particles[5].length > 360) {
+                    const rand = Math.round(Math.random() * 5)
+                    if (particles[rand].length > 1) {
+                        particles[rand].shift()
+                    }
+                }
+            } else {
+                while (particles[0].length + particles[1].length + particles[2].length + particles[3].length + particles[4].length + particles[5].length < 360) {
+                    const rand = Math.round(Math.random() * 5)
+                    particles[rand].push(setParticleInfo(window.innerWidth / 2, window.innerHeight / 2, randomG(), randomG(), particles[rand][0].color)); // bad code lol
+                }
+            }
+        }
+
+        function cycleParticles(amount) {
+            for (let i = 0; i < amount; i++) {
+                const rand = Math.round(Math.random() * 5)
+                if (particles[rand].length > 1) {
+                    particles[rand].shift()
+
+                    const otherRand = Math.round(Math.random() * 5)
+                    particles[otherRand].push(setParticleInfo(window.innerWidth / 2, window.innerHeight / 2, randomG(), randomG(), particles[otherRand][0].color)); // bad code lol
+                }
+            }
+        }
+
+
+
+        function drawRect(x, y, color, size) {
+            displayContext.fillStyle = color;
+            displayContext.fillRect(x, y, size, size);
+        }
+
+        function drawArc(x, y, color, size) {
+            displayContext.fillStyle = color;
+            displayContext.beginPath()
+            displayContext.arc(x, y, size, 0, 2 * Math.PI);
+            displayContext.fill()
+        }
+
+        //particles array
+        particles = [];
+        //particle function
+        function setParticleInfo(x, y, velocityX, velocityY, color) {
+            return {"x":x, "y":y, "velocityX":velocityX, "velocityY":velocityY, "color":color};
+        }
+
+        function randomPosX() {
+            return Math.random() * screenWidth;
+        }
+
+        function randomPosY() {
+            return Math.random() * screenHeight;
+        }
+
+        function randomG() {
+            return Math.random() < 0.5? Math.random() * -1 : Math.random() * 1;
+        }
+
+        //creates a particle group
+        groupInfo = []
+        function createParticleGroup(num, color, gravitationalConsts, groupNum) {
+            group = [];
+            if (groupInfo[groupNum] == undefined) {
+                for (i = 0; i < num; i++) {
+                    group.push(setParticleInfo(randomPosX(), randomPosY(), 0, 0, color));
+                }
+                particles.push(group);
+                groupInfo.push([])
+            
+                for (var i = 0; i < gravitationalConsts.length; i++) {
+                    groupInfo[groupInfo.length - 1].push(gravitationalConsts[i] * -1)
+                }
+            } else {
+                for (i = 0; i < num; i++) {
+                    particles[groupNum].push(setParticleInfo(randomPosX(), randomPosY(), 0, 0, color))
+                }
+            }
+            return group;
+        }
+
+        //update the screen
+        function render(particleGroup1, particleGroup2, gravitationalConst) {
+            for (i = 0; i < particleGroup1.length; i++) {
+                forceX = 0
+                forceY = 0
+                for (j = 0; j < particleGroup2.length; j++) {
+                    if (j === i) continue;
+                    distanceX = particleGroup1[i].x - particleGroup2[j].x
+                    distanceY = particleGroup1[i].y - particleGroup2[j].y
+                    distance = Math.hypot(distanceX, distanceY)
+                    force = calculateForce(distance, gravitationalConst)
+                    if (distance != 0) {
+                        forceX += (distanceX / distance) * force;
+                        forceY += (distanceY / distance) * force;
+                    }
+                }
+                particleGroup1[i].velocityX = particleGroup1[i].velocityX * friction + forceX * deltaT * K;
+                particleGroup1[i].velocityY = particleGroup1[i].velocityY * friction + forceY * deltaT * K;
+
+                particleGroup1[i].x += particleGroup1[i].velocityX;
+                particleGroup1[i].y += particleGroup1[i].velocityY;
+                if (particleGroup1[i].x < 1 || particleGroup1[i].x > screenWidth || particleGroup1[i].y < 1 || particleGroup1[i].y > screenHeight) {
+                    // let newColor = Math.floor(Math.random() * 6);
+                    // console.log('created new particle of type ' + newColor);
+                    // switch (newColor) {
+                    //     case 0:
+                    //         createParticleGroup(1, "ffff00", yellow, 0);
+                    //         break;
+                    //     case 1:
+                    //         createParticleGroup(1, "ffff00", green, 1);
+                    //         break;
+                    //     case 2:
+                    //         createParticleGroup(1, "ffff00", cyan, 2);
+                    //         break;
+                    //     case 3:
+                    //         createParticleGroup(1, "ffff00", blue, 3);
+                    //         break;
+                    //     case 4:
+                    //         createParticleGroup(1, "ffff00", pink, 4);
+                    //         break;
+                    //     case 5:
+                    //         createParticleGroup(1, "ffff00", red, 5);
+                    //         break;
+                    //     default:
+                    //         console.log('broke');
+                    //         console.log(newColor);
+                    //     }
+                    if (particleGroup1[i].x < 1 || particleGroup1[i].x > screenWidth) {
+                        if (particleGroup1[i].x < 1) {particleGroup1[i].x = 2}
+                        if (particleGroup1[i].x > screenWidth) {particleGroup1[i].x = screenWidth - 1}
+                        particleGroup1[i].velocityX *= -1;
+                    } else {
+                        if (particleGroup1[i].y < 1) {particleGroup1[i].y = 2}
+                        if (particleGroup1[i].y > screenHeight) {particleGroup1[i].y = screenHeight - 1}
+                        particleGroup1[i].velocityY *= -1;
+                    }
+                }
+            }
+        }
+
+        function calculateForce(distance, gravitationalConst) {
+            const maxRadius = 60
+            const minRadius = maxRadius * 0.3
+            if (distance < minRadius) {
+                return Math.abs(distance / minRadius - 1)
+            } else if (minRadius < distance && distance < maxRadius) {
+                return gravitationalConst * (1 - Math.abs(2 * distance - 1 - minRadius) / (1 - minRadius))
+            } else {
+                return 0
+            }
+        }
+
+
+        function update() {
+            screenWidth = window.innerWidth;
+            screenHeight = window.innerHeight;
+            displayContext.canvas.width = screenWidth;
+            displayContext.canvas.height = screenHeight;
+            for (var i = 0; i < particles.length; i++) {
+                for (var j = 0; j < particles.length; j++) {
+                    render(particles[i], particles[j], groupInfo[i][j]);
+                }
+            }
+            displayContext.clearRect(0, 0, screenWidth, screenHeight);
+            drawRect(0, 0, "black", Math.max(screenWidth, screenHeight));
+            for (var i = 0; i < particles.length; i++) {
+                for (var j = 0; j < particles[i].length; j++) {
+                    drawArc(particles[i][j].x, particles[i][j].y, particles[i][j].color, 2.5);
+                }
+            }
+            const currentFrame = performance.now();
+            deltaT = currentFrame - lastFrame;
+            fps = 1000 / deltaT;
+            lastFrame = currentFrame;
+            requestAnimationFrame(update);
+        }
+        createParticleGroup(60, "#ffff00", yellow, 0);
+        createParticleGroup(60, "#00ff00", green, 1);
+        createParticleGroup(60, "#00ffff", cyan, 2)
+        createParticleGroup(60, "#0000ff", blue, 3);
+        createParticleGroup(60, "#ff00ff", pink, 4);
+        createParticleGroup(60, "#ff0004", red, 5);
+        update();
+
+        document.addEventListener('keydown', (event) => { //TODO: implement graphical user interface
+            if (event.key == "k") {
+                resetForceValues();
+            } else if (event.key == "p") {
+                addRandomParticles(1);
+            } else if (event.key == "o") {
+                removeRandomParticles(1);
+            } else if (event.key == "l") {
+                resetParticlesCounter();
+            } else if (event.key == "i") {
+                cycleParticles(1);
+            }
+        })
+    </script>
+</body>
+</html>
