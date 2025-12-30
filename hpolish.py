@@ -4,7 +4,7 @@ lastKey = ""
 def handler(event: keyboard.KeyboardEvent):
 	global lastKey
 
-	uppercase = False
+	uppercase = event.name.isupper()
 	if keyboard.is_pressed("shift"): uppercase = True
 	if keyboard.is_pressed("ctrl") or keyboard.is_pressed("alt") or keyboard.is_pressed("left windows") or not event.name: 
 		keyboard.send(event.name or "")
