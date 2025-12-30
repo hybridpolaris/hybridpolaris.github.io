@@ -39,6 +39,10 @@ def handler(event: keyboard.KeyboardEvent):
 				keyboard.write("\bχ̌")
 			elif lastKey == "C":
 				keyboard.write("\bX̌")
+			elif lastKey == "p":
+				keyboard.write("\bΦ")
+			elif lastKey == "P":
+				keyboard.write("\bφ")
 			elif lastKey.lower() == "s":
 				keyboard.write("̌")
 			else:

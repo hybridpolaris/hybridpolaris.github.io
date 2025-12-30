@@ -79,6 +79,8 @@ textarea.addEventListener("keydown", e => {
             else if (lastKey === "T") { backspace(textarea); insert(textarea, "Θ"); }
             else if (lastKey === "c") { backspace(textarea); insert(textarea, "χ̌"); }
             else if (lastKey === "C") { backspace(textarea); insert(textarea, "X̌"); }
+            else if (lastKey === "p") { backspace(textarea); insert(textarea, "φ"); }
+            else if (lastKey === "P") { backspace(textarea); insert(textarea, "Φ")}
             else if (lastKey === "s") { insert(textarea, "̌"); }
             else {
                 resetLastKey = false;
