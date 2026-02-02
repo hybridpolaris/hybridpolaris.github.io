@@ -100,6 +100,7 @@ def SLastFormHandler(event: keyboard.KeyboardEvent):
 	
 mouse.on_click(lastKeyHandler)
 keyboard.on_press_key("backspace", lastKeyHandler)
+keyboard.on_press_key("space", lastKeyHandler)
 keyboard.on_press(SLastFormHandler)
 for letter in "abcdefghijklmnopqrstuvwxyz": 
 	keyboard.on_press_key(letter, handler, suppress=True)
