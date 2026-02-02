@@ -92,15 +92,13 @@ def lastKeyHandler(_=""):
 
 def SLastFormHandler(event: keyboard.KeyboardEvent):
 	global lastKey
-	if not lastKey == "s" or (keyboard.is_pressed("ctrl") or keyboard.is_pressed("alt") or keyboard.is_pressed("left windows")): return
-
-	keyboard.write("\b\bς")
-	keyboard.send(event.name)
+	if lastKey == "s" and not (keyboard.is_pressed("ctrl") or keyboard.is_pressed("alt") or keyboard.is_pressed("left windows")):
+		keyboard.write("\b\bς")
+		keyboard.send(event.name)
 	lastKey = ""
 	
 mouse.on_click(lastKeyHandler)
 keyboard.on_press_key("backspace", lastKeyHandler)
-keyboard.on_press_key("space", lastKeyHandler)
 keyboard.on_press(SLastFormHandler)
 for letter in "abcdefghijklmnopqrstuvwxyz": 
 	keyboard.on_press_key(letter, handler, suppress=True)
