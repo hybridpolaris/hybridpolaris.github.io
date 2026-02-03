@@ -23,19 +23,6 @@ textarea.addEventListener("keydown", e => {
     const uppercase = e.shiftKey;
     const k = key.toLowerCase();
     
-    // SPACEBAR special case
-    if (key === " ") {
-        e.preventDefault();
-        if (lastKey === "s") {
-            backspace(textarea);
-            insert(textarea, "ς ");
-        } else {
-            insert(textarea, " ");
-        }
-        lastKey = "";
-        return;
-    }
-    
     // BACKSPACE resets state
     if (key === "Backspace") {
         lastKey = "";
@@ -43,7 +30,15 @@ textarea.addEventListener("keydown", e => {
     }
     
     // Only letters
-    if (k.length !== 1 || k < "a" || k > "z") return;
+    if (k.length !== 1 || k < "a" || k > "z") {
+        if (lastKey === "s" && !e.shiftKey) {
+            e.preventDefault();
+            backspace(textarea);
+            insert(textarea, "ς" + k);
+        }
+        lastKey = "";
+        return;
+    };
     
     e.preventDefault();
     
