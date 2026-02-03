@@ -54,9 +54,19 @@ textarea.addEventListener("keydown", e => {
     switch (k) {
         case "a": insert(textarea, uppercase ? "A" : "α"); break;
         case "b": insert(textarea, uppercase ? "B" : "β"); break;
-        case "c": insert(textarea, uppercase ? "C" : "c"); break;
+        case "c": insert(textarea, uppercase ? "Ḱ" : "κ́"); break;
         case "d": insert(textarea, uppercase ? "Δ" : "δ"); break;
-        case "e": insert(textarea, uppercase ? "E" : "e"); break;
+
+        case "e": 
+            if (lastKey === "c" || lastKey === "C") {
+                backspace(textarea);
+                backspace(textarea);
+                insert(textarea, uppercase ? "Σ́" : "σ́");
+                resetLastKey = true;
+            }
+            insert(textarea, uppercase ? "E" : "e"); 
+            break;
+
         case "f": insert(textarea, uppercase ? "Φ" : "φ"); break;
 
         case "g":
@@ -72,8 +82,8 @@ textarea.addEventListener("keydown", e => {
             resetLastKey = true;
             if (lastKey === "t") { backspace(textarea); insert(textarea, "θ"); }
             else if (lastKey === "T") { backspace(textarea); insert(textarea, "Θ"); }
-            else if (lastKey === "c") { backspace(textarea); insert(textarea, "χ̌"); }
-            else if (lastKey === "C") { backspace(textarea); insert(textarea, "X̌"); }
+            else if (lastKey === "c") { backspace(textarea); backspace(textarea); insert(textarea, "χ̌"); }
+            else if (lastKey === "C") { backspace(textarea); backspace(textarea); insert(textarea, "X̌"); }
             else if (lastKey === "p") { backspace(textarea); insert(textarea, "φ"); }
             else if (lastKey === "P") { backspace(textarea); insert(textarea, "Φ")}
             else if (lastKey === "s") { insert(textarea, "̌"); }
@@ -83,19 +93,18 @@ textarea.addEventListener("keydown", e => {
             }
             break;
 
-        case "i": insert(textarea, uppercase ? "I" : "ι"); break;
-        case "j": insert(textarea, uppercase ? "X" : "χ"); break;
-
-        case "k":
+        case "i": 
             if (lastKey === "c" || lastKey === "C") {
                 backspace(textarea);
-                insert(textarea, uppercase ? "Ḱ" : "κ́");
+                backspace(textarea);
+                insert(textarea, uppercase ? "Σ́" : "σ́");
                 resetLastKey = true;
-            } else {
-                insert(textarea, uppercase ? "K" : "κ");
             }
+            insert(textarea, uppercase ? "I" : "ι"); 
             break;
 
+        case "j": insert(textarea, uppercase ? "X" : "χ"); break;
+        case "k": insert(textarea, uppercase ? "K" : "κ"); break;
         case "l": insert(textarea, uppercase ? "Λ" : "λ"); break;
         case "m": insert(textarea, uppercase ? "M" : "μ"); break;
         case "n": insert(textarea, uppercase ? "N" : "v"); break;
@@ -103,23 +112,21 @@ textarea.addEventListener("keydown", e => {
         case "p": insert(textarea, uppercase ? "Π" : "π"); break;
         case "q": insert(textarea, uppercase ? "Ϟ" : "ϰ"); break;
         case "r": insert(textarea, uppercase ? "P" : "p"); break;
-
-        case "s":
-            if (lastKey === "c" || lastKey === "C") {
-                backspace(textarea);
-                insert(textarea, uppercase ? "Σ́" : "σ́");
-                resetLastKey = true;
-            } else {
-                insert(textarea, uppercase ? "Σ" : "σ");
-            }
-            break;
-
+        case "s": insert(textarea, uppercase ? "Σ" : "σ"); break;
         case "t": insert(textarea, uppercase ? "T" : "τ"); break;
         case "u": insert(textarea, uppercase ? "U" : "u"); break;
         case "v": insert(textarea, uppercase ? "B́" : "β́"); break;
         case "w": insert(textarea, uppercase ? "F" : "ω"); break;
         case "x": insert(textarea, uppercase ? "Ξ" : "ξ"); break;
-        case "y": insert(textarea, uppercase ? "H" : "η"); break;
+        case "y": 
+            if (lastKey === "c" || lastKey === "C") {
+                backspace(textarea);
+                backspace(textarea);
+                insert(textarea, uppercase ? "Σ́" : "σ́");
+                resetLastKey = true;
+            }
+            insert(textarea, uppercase ? "H" : "η"); 
+            break;
         case "z": insert(textarea, uppercase ? "Z" : "ζ"); break;
     }
 
